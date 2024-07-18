@@ -1,0 +1,3 @@
+"","ID","Description","setSize","enrichmentScore","NES","pvalue","p.adjust","qvalue","rank","leading_edge","core_enrichment"
+"1","hsa04621","NOD-like receptor signaling pathway",11,-0.763104959799955,-2.01050276916111,0.000381361667719987,0.00266953167403991,0.00200716667221046,39,"tags=91%, list=27%, signal=71%","115361/4790/3326/2634/6772/330/115362/2633/3576/3553"
+"2","hsa05163","Human cytomegalovirus infection",12,-0.685929172589484,-1.84455656149831,0.00385286728688622,0.0134850355041018,0.0101391244391743,6,"tags=25%, list=4%, signal=26%","3576/3553/3135"

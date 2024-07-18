@@ -1,0 +1,2 @@
+"","ID","Description","setSize","enrichmentScore","NES","pvalue","p.adjust","qvalue","rank","leading_edge","core_enrichment"
+"1","hsa04621","NOD-like receptor signaling pathway",24,-0.609861908541038,-2.06555206573843,0.000588942252275937,0.0453485534252471,0.0402960488399325,117,"tags=54%, list=18%, signal=46%","8767/3665/837/834/114769/2634/6772/9447/115361/3576/2633/115362/3553"

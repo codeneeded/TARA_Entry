@@ -1,0 +1,2 @@
+"","ONTOLOGY","ID","Description","setSize","enrichmentScore","NES","pvalue","p.adjust","qvalue","rank","leading_edge","core_enrichment"
+"1","BP","GO:0050870","positive regulation of T cell activation",7,-0.884136920156808,-2.02645408148697,4.39835378809432e-05,0.0388814474867537,0.0359276056795915,13,"tags=57%, list=8%, signal=55%","TNFSF13B/SOCS1/IL1B/HLA-G"

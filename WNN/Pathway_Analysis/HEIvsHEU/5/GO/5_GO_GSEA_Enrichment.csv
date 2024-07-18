@@ -1,0 +1,3 @@
+"","ONTOLOGY","ID","Description","setSize","enrichmentScore","NES","pvalue","p.adjust","qvalue","rank","leading_edge","core_enrichment"
+"1","MF","GO:0001216","DNA-binding transcription activator activity",17,-0.708825459062666,-2.48601120850992,1.05032512918852e-05,0.0103089411429853,0.00988411226836351,80,"tags=71%, list=16%, signal=61%","ZNF395/TCF3/DDIT3/MYC/JUND/JUNB/EGR1/NR4A2/JUN/KLF6/FOSB/FOS"
+"2","MF","GO:0001228","DNA-binding transcription activator activity, RNA polymerase II-specific",17,-0.708825459062666,-2.48601120850992,1.05032512918852e-05,0.0103089411429853,0.00988411226836351,80,"tags=71%, list=16%, signal=61%","ZNF395/TCF3/DDIT3/MYC/JUND/JUNB/EGR1/NR4A2/JUN/KLF6/FOSB/FOS"
