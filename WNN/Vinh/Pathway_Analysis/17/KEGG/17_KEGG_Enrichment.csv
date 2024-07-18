@@ -1,0 +1,2 @@
+"","ID","Description","setSize","enrichmentScore","NES","pvalue","p.adjust","qvalue","rank","leading_edge","core_enrichment"
+"1","hsa04612","Antigen processing and presentation",11,0.747727292676842,2.03868979154367,0.000320996629870185,0.000641993259740369,0.000337891189337036,10,"tags=45%, list=8%, signal=46%","3127/3122/3123/3115/3113"

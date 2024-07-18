@@ -450,23 +450,114 @@ for (i in features) {
   ggsave(paste0(i,'_Featureplot.png'),dpi=500, width = 8, fea.pl)
 }
 
+################################### Differential Gene Expression #############################################
+
+### High Viral Load Vs Low Viral Load
+
+order(levels(as.factor(seurat_isotype$Viral_Load)))
 
 
+# Extract the metadata
+metadata <- seurat_isotype@meta.data
 
+# Define the threshold for high and low viral load
+threshold <- 100000
 
+# Create a new column 'Viral_Load_Category' based on the threshold
+metadata$Viral_Load_Category <- ifelse(as.numeric(as.character(metadata$Viral_Load)) > threshold, "High", "Low")
 
+# Assign the updated metadata back to the Seurat object
+seurat_isotype@meta.data <- metadata
 
+# Verify the changes
+head(seurat_isotype@meta.data)
 
+### Subset
 
+seurat_viral <- subset(seurat_isotype, subset = Timepoint =='Entry'& Condition == 'HEI')
 
+### RNA
 
+setwd('C:/Users/axi313/Documents/TARA_Entry/WNN/Differential_Expression/HighVL_Vs_LowVL/RNA')
+DefaultAssay(seurat_viral) <- 'RNA'
+for (i in levels(Idents(seurat_viral))) {
+  dge <- FindMarkers(seurat_viral,ident.1 = 'High', ident.2 = 'Low', group.by = 'Viral_Load_Category',
+                     subset.ident = i, test.use = 'MAST')
+  write.csv(dge, paste0('Cluster_',i,'_DGE_HighVL_Vs_LowVL.csv'), row.names = TRUE)
+}
 
+### ADT
 
+setwd('C:/Users/axi313/Documents/TARA_Entry/WNN/Differential_Expression/HighVL_Vs_LowVL/ADT')
+DefaultAssay(seurat_viral) <- 'ADT'
+for (i in levels(Idents(seurat_viral))) {
+  dge <- FindMarkers(seurat_viral,ident.1 = 'High', ident.2 = 'Low', group.by = 'Viral_Load_Category',
+                     subset.ident = i, test.use = 'MAST')
+  write.csv(dge, paste0('Cluster_',i,'_DGE_HighVL_Vs_LowVL.csv'), row.names = TRUE)
+}
 
+##### Adding CTL-metadata ####
+# Create a mapping of orig.ident to the new grouping based on the image
+group_mapping <- list(
+  "CP006_entry" = "low",
+  "CP006_12m" = "low",
+  "CP011_entry" = "high",
+  "CP013_entry" = "low",
+  "CP016_entry" = "high",
+  "CP017_entry" = "high",
+  "CP022_entry" = "high",
+  "CP042_entry" = "low",
+  "SA-AH-29_entry" = "high",
+  "SA-TY-021_entry" = "low",
+  "CP003_entry" = "high",
+  "CP002_entry" = "high",
+  "CP018_entry" = "low"
+)
 
+# Function to assign the group based on orig.ident
+assign_group <- function(orig.ident) {
+  if (orig.ident %in% names(group_mapping)) {
+    return(group_mapping[[orig.ident]])
+  } else {
+    return("HEU/HUU")
+  }
+}
 
+# Extract the metadata
+metadata <- seurat_isotype@meta.data
 
+# Create the new column 'Grouping'
+metadata$CTLGrouping <- sapply(metadata$orig.ident, assign_group)
 
+# Assign the updated metadata back to the Seurat object
+seurat_isotype@meta.data <- metadata
+
+# Check the updated metadata to ensure changes are correct
+head(seurat_isotype@meta.data)
+
+save(seurat_isotype, file=paste0(load.path,"Seuratv5_WNN_labled.RData"))
+
+########## DGE CTL-expanding vs CTL non-expanding ######
+
+### NK 6,8,17,18
+
+setwd('C:/Users/axi313/Documents/TARA_Entry/WNN/Differential_Expression/HighVL_Vs_LowVL/RNA')
+DefaultAssay(seurat_viral) <- 'RNA'
+for (i in levels(Idents(seurat_viral))) {
+  dge <- FindMarkers(seurat_viral,ident.1 = 'High', ident.2 = 'Low', group.by = 'Viral_Load_Category',
+                     subset.ident = i, test.use = 'MAST')
+  write.csv(dge, paste0('Cluster_',i,'_DGE_HighVL_Vs_LowVL.csv'), row.names = TRUE)
+}
+
+### ADT
+
+setwd('C:/Users/axi313/Documents/TARA_Entry/WNN/Differential_Expression/HighVL_Vs_LowVL/ADT')
+DefaultAssay(seurat_viral) <- 'ADT'
+for (i in levels(Idents(seurat_viral))) {
+  dge <- FindMarkers(seurat_viral,ident.1 = 'High', ident.2 = 'Low', group.by = 'Viral_Load_Category',
+                     subset.ident = i, test.use = 'MAST')
+  write.csv(dge, paste0('Cluster_',i,'_DGE_HighVL_Vs_LowVL.csv'), row.names = TRUE)
+}
 
 ###### EXTRA #################
 
