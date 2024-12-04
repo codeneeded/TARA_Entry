@@ -53,6 +53,35 @@ names(polychrome_colors) <- levels(seurat_isotype$wsnn_res.0.8)
 # View the hex codes for each cluster
 print(polychrome_colors)
 
+
+#### Genes of interest - EXTRA
+setwd('C:/Users/axi313/Documents/TARA_Entry/WNN/Extra_Plot')
+
+pal <- viridis(n = 5, option = "D") # Magma Colour Scheme
+
+DefaultAssay(seurat_isotype) <- 'RNA'
+FeaturePlot_scCustom(seurat_isotype, reduction = 'wnn.umap', features = 'KIR2DL1', colors_use = pal,order=TRUE)
+ggsave('KIR2DL1_RNA.png',dpi=500)
+FeaturePlot_scCustom(seurat_isotype, reduction = 'wnn.umap', features = 'KIR2DL1', colors_use = pal,order=TRUE,
+                     split.by = 'Viral_Load_Category')
+ggsave('KIR2DL1_RNA_byVL.png',dpi=500,width=9)
+
+FeaturePlot_scCustom(seurat_isotype, reduction = 'wnn.umap', features = 'HLA-C', colors_use = pal,keep.scale = 'feature',order=TRUE)
+ggsave('HLA-C_RNA.png',dpi=500)
+FeaturePlot_scCustom(seurat_isotype, reduction = 'wnn.umap', features = 'HLA-C', colors_use = pal,order=TRUE,
+                     split.by = 'Viral_Load_Category')
+ggsave('HLA-C_RNA_byVL.png',dpi=500,width = 9)
+
+
+FeaturePlot_scCustom(seurat_isotype, reduction = 'wnn.umap', features = 'IFNAR1', colors_use = pal,order=TRUE,
+                     split.by = 'Viral_Load_Category')
+VlnPlot_scCustom(seurat_isotype,features = 'IFNAR1' ,split.by = 'Viral_Load_Category')
+ggsave('IFNAR1_VLN.png',dpi=500,width = 9)
+VlnPlot_scCustom(seurat_isotype,features = 'HLA-C' ,split.by = 'Viral_Load_Category')
+ggsave('HLA-C_VLN.png',dpi=500,width = 9)
+VlnPlot_scCustom(seurat_isotype,features = 'KIR2DL1' ,split.by = 'Viral_Load_Category')
+ggsave('KIR2DL1_VLN.png',dpi=500,width = 9)
+
 ##### Interferon Stimulated Genes ###########
 setwd('C:/Users/axi313/Documents/TARA_Entry/WNN/Manuscript/ISG')
 
