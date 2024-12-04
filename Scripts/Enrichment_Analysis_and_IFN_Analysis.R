@@ -532,6 +532,7 @@ for (cluster_to_plot in names(enrichment_results)) {
 ### HIV Status
 
 ### mRNA
+enrichment_results <- list()
 
 # Perform enrichment for each cluster
 for (i in 0:29) {
@@ -572,6 +573,100 @@ for (cluster in names(enrichment_results)) {
 }
 
 
+#### ENRICHMENT PLOTS - HIV Status
+
+# Define the output directory
+output_dir <- "C:/Users/axi313/Documents/TARA_Entry/WNN/Manuscript/Enrichment_HIV_Status/mRNA/Plots/"
+
+# Define transcription factor and pathway databases
+tf_databases <- c("TRRUST_Transcription_Factors_2019", "ChEA_2022", "TRANSFAC_and_JASPAR_PWMs")
+pathway_databases <- c("KEGG_2021_Human", "WikiPathways_2024_Human", "GO_Biological_Process_2023", 
+                       "MSigDB_Hallmark_2020", "Panther_2016", "Reactome_2022", "BioPlanet_2019")
+
+# Iterate over each cluster in the filtered enrichment results
+for (cluster_to_plot in names(enrichment_results)) {
+  
+  # Initialize a list to store the top pathways for all databases
+  top_pathways_list <- list()
+  
+  # Iterate over each database for the cluster
+  for (db_name in names(enrichment_results[[cluster_to_plot]])) {
+    # Extract the results for the database
+    db_results <- enrichment_results[[cluster_to_plot]][[db_name]]
+    
+    # Filter for significant pathways (adjusted p-value < 0.05)
+    significant_results <- db_results %>%
+      filter(`Adjusted.P.value` < 0.05)
+    
+    # Proceed only if there are significant results
+    if (nrow(significant_results) > 0) {
+      # Select the top 10 pathways by adjusted p-value
+      top_10 <- significant_results %>%
+        arrange(`Combined.Score`) %>%
+        slice_head(n = 10)
+      
+      # Add a column for the database name
+      top_10 <- top_10 %>%
+        mutate(Database = db_name)
+      
+      # Append to the list
+      top_pathways_list[[db_name]] <- top_10
+    }
+  }
+  
+  # Combine all results into a single data frame
+  top_pathways_df <- bind_rows(top_pathways_list)
+  
+  # Filter into transcription factors and pathway subsets
+  tf_df <- top_pathways_df %>%
+    filter(Database %in% tf_databases) %>%
+    arrange(desc(Combined.Score)) %>%
+    slice(1:20)
+  
+  pathway_df <- top_pathways_df %>%
+    filter(Database %in% pathway_databases) %>%
+    arrange(desc(Combined.Score)) %>%
+    slice(1:20)
+  
+  # Function to create and save plots
+  create_and_save_plot <- function(data, title_suffix, filename_suffix) {
+    if (nrow(data) > 0) {
+      p <- ggplot(data, aes(x = reorder(Term, `Combined.Score`), y = Combined.Score, fill = Database)) +
+        geom_bar(stat = "identity", position = "dodge") +
+        coord_flip() +
+        labs(
+          title = paste("Top", title_suffix, "for Cluster", cluster_to_plot),
+          x = "Pathway",
+          y = "Enrichment Score"
+        ) +
+        theme_minimal() +
+        theme(
+          axis.text.y = element_text(size = 12, color = "black"),  # Y-axis tick labels
+          axis.text.x = element_text(size = 12),        # X-axis tick labels
+          axis.title.y = element_text(size = 14),       # Y-axis title
+          axis.title.x = element_text(size = 14),       # X-axis title
+          plot.title = element_text(size = 16, hjust = 0.5)  # Plot title
+        )
+      
+      ggsave(
+        filename = paste0(output_dir, "Cluster_", cluster_to_plot, "_", filename_suffix, ".png"),
+        plot = p,
+        width = 15,
+        height = 12,
+        dpi = 300,
+        bg = "white"
+      )
+      
+      cat("Saved", title_suffix, "plot for Cluster", cluster_to_plot, "\n")
+    } else {
+      message(paste("No significant", title_suffix, "found for cluster", cluster_to_plot, "across the databases."))
+    }
+  }
+  
+  # Create and save plots
+  create_and_save_plot(tf_df, "Transcription Factors", "Transcription_Factors")
+  create_and_save_plot(pathway_df, "Pathways", "Pathways")
+}
 
 
 
@@ -581,7 +676,7 @@ for (cluster in names(enrichment_results)) {
 
 
 
-
+############ TYPE 1 IFN ####################
 
 
 
